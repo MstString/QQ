@@ -3,26 +3,27 @@ package xju.software.user;
 import java.io.Serializable;
 
 public class User implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
 	private String nickname;
 	private String Ip;
 	private String sign;
-	private int state; // 0 离线  1 上线
+	private int status; // 0 离线  1 上线
 	private UserImage userimage;
 	
 	public User() {
 		super();
 	}
 	public User(String username, String password, String nickname, String Ip,
-			String sign,int state) {
+			String sign,int status) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.nickname = nickname;
 		this.Ip = Ip;
 		this.sign = sign;
-		this.state = state;
+		this.status = status;
 	}
 	
 	
@@ -63,11 +64,11 @@ public class User implements Serializable{
 	public void setSign(String sign) {
 		this.sign = sign;
 	}
-	public int getState() {
-		return state;
+	public int getstatus() {
+		return status;
 	}
-	public void setState(int state) {
-		this.state = state;
+	public void setstatus(int status) {
+		this.status = status;
 	}
 	public UserImage getUserimage() {
 		return userimage;

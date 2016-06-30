@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class QQSQL {
 	
-	private static String database_path = "C:/Users/String/Desktop/TermQQ/lib/QQ.db";
+	private static String database_path = System.getProperty("user.dir") + "/lib/QQ.db";
 	
 	public QQSQL(){
 		
@@ -34,7 +34,7 @@ public class QQSQL {
 	}
 	
 	public String SQLConnection_Login(String username){
-		String sql = "select * from QQUsers where username=";
+		String sql = "select * from QQUsers where username = ";
 		String password = "";
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -42,7 +42,7 @@ public class QQSQL {
 				Connection conn = DriverManager.getConnection("jdbc:sqlite:" + database_path);
 				Statement st = conn.createStatement();
 				//SQL语句一定要绝对匹配！
-				ResultSet rs = st.executeQuery(sql+"'"+username+"';");
+				ResultSet rs = st.executeQuery(sql + "'" + username+ "';");
 				while(rs.next()){
 					password = rs.getString("password");
 				}

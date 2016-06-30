@@ -153,7 +153,7 @@ public class LoginFrame extends JFrame implements MouseListener{
 		public void paintComponent(Graphics g){
 			int x = 0;
 			int y = 0;
-			ImageIcon icon = new ImageIcon("C:/Users/String/Desktop/TermQQ/src/xju/software/image/QQ_Login.png");
+			ImageIcon icon = new ImageIcon(System.getProperty("user.dir") + "/src/xju/software/image/QQ_Login.png");
 			g.drawImage(icon.getImage(), x, y, getSize().width, getSize().height, this);
 		}
 	}
@@ -307,7 +307,6 @@ public class LoginFrame extends JFrame implements MouseListener{
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		String username = Login_textfield_username.getText();
-		System.out.println(username);
 		String password = new String(Login_passwordfield_password.getPassword());
 		QQSQL qqsql = new QQSQL();
 		
@@ -320,7 +319,7 @@ public class LoginFrame extends JFrame implements MouseListener{
 			if (username.equals("") || password.equals("")){
 				JOptionPane.showMessageDialog(this, "用户名和密码不能为空！", "错误", JOptionPane.ERROR_MESSAGE);
 			}
-			else if(password.equals(qqsql.SQLConnection_Login("String"))){
+			else if(password.equals(qqsql.SQLConnection_Login(username))){
 				dispose();
 				new MainFrame().setVisible(true);;
 			}
