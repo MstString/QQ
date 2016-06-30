@@ -1,4 +1,4 @@
-package xju.software.login;
+package xju.software.frame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,11 +8,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -24,10 +26,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.MouseInputListener;
 
+import xju.software.action.QQSQL;
 
-public class LoginFrame extends JFrame{
+
+public class LoginFrame extends JFrame implements MouseListener{
 	
-	public JPanel Login_panel = new JPanel();
+	public JPanel Login_panel;
 	public JLabel Login_label_minisize;
 	public JLabel Login_label_close;
 	public JLabel Login_label_photo;
@@ -40,13 +44,13 @@ public class LoginFrame extends JFrame{
 	public JCheckBox Login_checkbox_autologin;
 	public JLabel Login_label_add;
 	public JLabel Login_label_setting;
+	public int flag = 0;
 	
 	/*
 	 * Made By LiZhengYang
 	 * 2016~6~25
 	 */
 	public LoginFrame(){
-		
 		this.setTitle("QQ");
 		this.setBounds(100, 100, 354, 272);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,33 +74,36 @@ public class LoginFrame extends JFrame{
 		scrollPane.setViewportView(tree);
 		
 		Login_textfield_username = new JTextField();
-		Login_textfield_username.setText("请输入您的用户名");
+		Login_textfield_username.setText("");
 		Login_textfield_username.setBounds(108, 132, 160, 24);
 		Login_textfield_username.setBorder(new EmptyBorder(0,0,0,0));
 		this.add(Login_textfield_username);
 		
 		Login_label_minisize = new JLabel("");
-		Login_label_minisize.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/login_minsize_2.png")));
+		Login_label_minisize.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/login_minsize_1.png")));
 		Login_label_minisize.setBounds(286, 0, 29, 19);
+		Login_label_minisize.addMouseListener(this);
 		this.add(Login_label_minisize);
 		
 		Login_label_close = new JLabel("");
 		Login_label_close.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/Login_close_1.png")));
 		Login_label_close.setBounds(316, 0, 38, 19);
+		Login_label_close.addMouseListener(this);
 		this.add(Login_label_close);
+		
+		Login_passwordfield_password = new JPasswordField();
+		Login_passwordfield_password.setText("");
+		Login_passwordfield_password.setEchoChar('●');
+		Login_passwordfield_password.setBounds(108, 168, 158, 22);
+		Login_passwordfield_password.setBorder(new EmptyBorder(0,0,0,0));
+		this.add(Login_passwordfield_password);
 		
 		Login_label_register = new JLabel("注册账号");
 		Login_label_register.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		Login_label_register.setForeground(new Color(0, 51, 255));
 		Login_label_register.setBounds(288, 132, 55, 18);
+		Login_label_register.addMouseListener(this);
 		this.add(Login_label_register);
-		
-		Login_passwordfield_password = new JPasswordField();
-		Login_passwordfield_password.setText("请输入您的密码");
-		Login_passwordfield_password.setEchoChar('●');
-		Login_passwordfield_password.setBounds(108, 168, 158, 22);
-		Login_passwordfield_password.setBorder(new EmptyBorder(0,0,0,0));
-		this.add(Login_passwordfield_password);
 		
 		Login_label_findpassword = new JLabel("找回密码");
 		Login_label_findpassword.setFont(new Font("SansSerif", Font.PLAIN, 13));
@@ -123,22 +130,25 @@ public class LoginFrame extends JFrame{
 		Login_label_button.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/button_login_1.png")));
 		Login_label_button.setBorder(new Border(Color.WHITE, 0, this));
 		Login_label_button.setBounds(150, 235, 69, 22);
+		Login_label_button.addMouseListener(this);
 		this.add(Login_label_button);
 		
 		Login_label_add = new JLabel("");
 		Login_label_add.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_add_1.png")));
 		Login_label_add.setBounds(14, 235, 67, 21);
+		Login_label_add.addMouseListener(this);
 		this.add(Login_label_add);
 		
 		Login_label_setting = new JLabel("");
 		Login_label_setting.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_setting_1.png")));
 		Login_label_setting.setBounds(275, 235, 67, 21);
+		Login_label_setting.addMouseListener(this);
 		this.add(Login_label_setting);
 	}
+
 	
 	class MyPanel extends JPanel{
 		public MyPanel(){}
-		
 		@Override
 		public void paintComponent(Graphics g){
 			int x = 0;
@@ -264,20 +274,20 @@ public class LoginFrame extends JFrame{
 			}
 		}
 
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseClicked(MouseEvent e) {
 		}
 
-		public void mouseEntered(MouseEvent arg0) {
+		public void mouseEntered(MouseEvent e) {
 		}
 
-		public void mouseExited(MouseEvent arg0) {
+		public void mouseExited(MouseEvent e) {
 			frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 
-		public void mousePressed(MouseEvent arg0) {
+		public void mousePressed(MouseEvent e) {
 		}
 
-		public void mouseReleased(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent e) {
 		}
 
 	}
@@ -292,6 +302,119 @@ public class LoginFrame extends JFrame{
 				}
 			}
 		});
+	}
+//实现对在面板上按钮的操作的响应
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		String username = Login_textfield_username.getText();
+		System.out.println(username);
+		String password = new String(Login_passwordfield_password.getPassword());
+		QQSQL qqsql = new QQSQL();
+		
+		if (e.getSource() == Login_label_register){
+			dispose();
+			new RegisterFrame().setVisible(true);
+		}
+		
+		if (e.getSource() == Login_label_button){
+			if (username.equals("") || password.equals("")){
+				JOptionPane.showMessageDialog(this, "用户名和密码不能为空！", "错误", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(password.equals(qqsql.SQLConnection_Login("String"))){
+				dispose();
+				new MainFrame().setVisible(true);;
+			}
+			else {
+				if (qqsql.SQLConnection_Login(username).equals("")){
+					JOptionPane.showMessageDialog(this, "用户不存在, 请重新注册！ ", "错误", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}
+		
+		if (e.getSource() == Login_label_minisize){
+			//最小化窗体
+			this.setExtendedState(JFrame.ICONIFIED);
+		}
+		
+		if (e.getSource() == Login_label_close){
+			System.exit(0);
+		}
+	}
+
+	public void mouseEntered(MouseEvent e) {
+		if (e.getSource() == Login_label_minisize){
+			Login_label_minisize.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/login_minsize_2.png")));
+		}
+		if (e.getSource() == Login_label_close){
+			Login_label_close.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/Login_close_2.png")));
+		}
+		if (e.getSource() == Login_label_add){
+			Login_label_add.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_add_2.png")));
+		}
+		if (e.getSource() == Login_label_button){
+			Login_label_button.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/button_login_2.png")));
+		}
+		if (e.getSource() == Login_label_setting){
+			Login_label_setting.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_setting_2.png")));
+		}
+	}
+
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == Login_label_minisize){
+			Login_label_minisize.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/login_minsize_1.png")));
+		}
+		if (e.getSource() == Login_label_close){
+			Login_label_close.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/Login_close_1.png")));
+		}
+		if (e.getSource() == Login_label_add){
+			Login_label_add.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_add_1.png")));
+		}
+		if (e.getSource() == Login_label_button){
+			Login_label_button.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/button_login_1.png")));
+		}
+		if (e.getSource() == Login_label_setting){
+			Login_label_setting.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_setting_1.png")));
+		}
+	}
+
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == Login_label_minisize){
+			Login_label_minisize.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/login_minsize_3.png")));
+			
+		}
+		if (e.getSource() == Login_label_close){
+			Login_label_close.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/Login_close_3.png")));
+		}
+		if (e.getSource() == Login_label_add){
+			Login_label_add.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_add_3.png")));
+		}
+		if (e.getSource() == Login_label_button){
+			Login_label_button.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/button_login_3.png")));
+		}
+		if (e.getSource() == Login_label_setting){
+			Login_label_setting.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_setting_3.png")));
+		}
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == Login_label_minisize){
+			Login_label_minisize.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/login_minsize_2.png")));
+		}
+		if (e.getSource() == Login_label_close){
+			Login_label_close.setIcon(new ImageIcon(LoginFrame.class.getResource("../Image/Login_close_2.png")));
+		}
+		if (e.getSource() == Login_label_add){
+			Login_label_add.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_add_2.png")));
+		}
+		if (e.getSource() == Login_label_button){
+			Login_label_button.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/button_login_2.png")));
+		}
+		if (e.getSource() == Login_label_setting){
+			Login_label_setting.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/login_setting_2.png")));
+		}
 	}
 	
 }
