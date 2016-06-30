@@ -40,11 +40,13 @@ public class LoginFrame extends JFrame implements MouseListener{
 	public JLabel Login_label_button;
 	public JLabel Login_label_register;
 	public JLabel Login_label_findpassword;
-	public JCheckBox Login_checkbox_rememberpassword;
-	public JCheckBox Login_checkbox_autologin;
 	public JLabel Login_label_add;
 	public JLabel Login_label_setting;
-	public int flag = 0;
+	private JTextField txt_port;
+	private JTextField txt_hostIp;
+	public String Username;
+	int port;
+	String IP;
 	
 	/*
 	 * Made By LiZhengYang
@@ -74,9 +76,10 @@ public class LoginFrame extends JFrame implements MouseListener{
 		scrollPane.setViewportView(tree);
 		
 		Login_textfield_username = new JTextField();
-		Login_textfield_username.setText("");
+		Login_textfield_username.setText("123");
 		Login_textfield_username.setBounds(108, 132, 160, 24);
 		Login_textfield_username.setBorder(new EmptyBorder(0,0,0,0));
+		this.Username = Login_textfield_username.getText();
 		this.add(Login_textfield_username);
 		
 		Login_label_minisize = new JLabel("");
@@ -116,15 +119,17 @@ public class LoginFrame extends JFrame implements MouseListener{
 		Login_label_photo.setBounds(18, 127, 81, 81);
 		this.add(Login_label_photo);
 		
-		Login_checkbox_rememberpassword = new JCheckBox();
-		Login_checkbox_rememberpassword.setText("记住密码");
-		Login_checkbox_rememberpassword.setBounds(106, 198, 81, 18);
-		this.add(Login_checkbox_rememberpassword);
+		txt_port = new JTextField();
+		txt_port.setText("8081");
+		txt_port.setBounds(106, 198, 81, 18);
+		this.port = Integer.parseInt(txt_port.getText().trim());
+		this.add(txt_port);
 		
-		Login_checkbox_autologin = new JCheckBox();
-		Login_checkbox_autologin.setText("自动登陆");
-		Login_checkbox_autologin.setBounds(237, 198, 81, 18);
-		this.add(Login_checkbox_autologin);
+		txt_hostIp = new JTextField();
+		txt_hostIp.setText("127.0.0.1");
+		txt_hostIp.setBounds(237, 198, 81, 18);
+		this.IP = txt_hostIp.getText();
+		this.add(txt_hostIp);
 		
 		Login_label_button = new JLabel("");
 		Login_label_button.setIcon(new ImageIcon(LoginFrame.class.getResource("../image/button_login_1.png")));
@@ -319,13 +324,16 @@ public class LoginFrame extends JFrame implements MouseListener{
 			if (username.equals("") || password.equals("")){
 				JOptionPane.showMessageDialog(this, "用户名和密码不能为空！", "错误", JOptionPane.ERROR_MESSAGE);
 			}
-			else if(password.equals(qqsql.SQLConnection_Login(username))){
-				dispose();
-				new MainFrame().setVisible(true);;
+			else if (qqsql.SQLConnection_Login(username).equals("")){
+					JOptionPane.showMessageDialog(this, "用户不存在, 请注册！ ", "错误", JOptionPane.ERROR_MESSAGE);
 			}
-			else {
-				if (qqsql.SQLConnection_Login(username).equals("")){
-					JOptionPane.showMessageDialog(this, "用户不存在, 请重新注册！ ", "错误", JOptionPane.ERROR_MESSAGE);
+			else{
+				if(password.equals(qqsql.SQLConnection_Login(username))){
+					dispose();
+					new MainFrame(port, IP, Username).setVisible(true);;
+				}
+				else{
+					JOptionPane.showMessageDialog(this, "密码错误, 请重新输入！ ", "错误", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}

@@ -34,7 +34,7 @@ public class QQSQL {
 	}
 	
 	public String SQLConnection_Login(String username){
-		String sql = "select * from QQUsers where username = ";
+		String sql = "select * from QQUsers where username=";
 		String password = "";
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -43,6 +43,8 @@ public class QQSQL {
 				Statement st = conn.createStatement();
 				//SQL语句一定要绝对匹配！
 				ResultSet rs = st.executeQuery(sql + "'" + username+ "';");
+//				ResultSet rs = st.executeQuery(sql);
+//				System.out.println(sql + "'" + username+ "';");
 				while(rs.next()){
 					password = rs.getString("password");
 				}

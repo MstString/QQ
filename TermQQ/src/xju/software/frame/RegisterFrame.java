@@ -153,9 +153,6 @@ public class RegisterFrame extends JFrame implements MouseListener {
 				JOptionPane.showMessageDialog(Register_button_register, "两次密码不同, 请重新输入！  ", "错误", JOptionPane.ERROR_MESSAGE);
 			} else {
 				try {
-					user.setUsername(username);
-					user.setNickname(nickname);
-					user.setPassword(password);
 					try {
 						//将图片存入路径
 						ImageTool.transUserImageToFile(ImageTool.getProperty("Client_UserImages_path", "") + user.getUsername() + "/", user.getUserimage());
